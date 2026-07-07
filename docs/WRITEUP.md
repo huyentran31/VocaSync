@@ -124,4 +124,4 @@ The engine generalizes; the demo is deliberately narrow. **Signature: "The AI pr
 Each roadmap item is an input or lexicon swap at the edges of the harness. The core loop — deterministic spine, agent interaction layer, a graph that is genuinely yours, and a human holding the only pen that writes to it — stays the same.
 
 ---
-*GitHub: [LINK] · Demo video: [LINK] · License: CC-BY 4.0*
+*GitHub: https://github.com/huyentran31/VocaSync · Demo video: https://www.youtube.com/watch?v=b0RqXDL3dnU · License: CC-BY 4.0*
