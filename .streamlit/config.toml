@@ -1,0 +1,13 @@
+[theme]
+primaryColor = "#10B981"
+backgroundColor = "#090D16"
+secondaryBackgroundColor = "#111827"
+textColor = "#F3F4F6"
+font = "sans serif"
+
+[server]
+headless = true
+maxUploadSize = 1024
+# Serve files placed in ./static/ at the URL path app/static/<file>. Used to open the
+# generated graph.html in a real new browser tab (a file:// link would be blocked).
+enableStaticServing = true

@@ -1,0 +1,20 @@
+{
+  "_doc": "Golden set for LLM-as-judge sense accuracy (Day-4). Each item: the term, the sentence it appears in, and the WordNet sense_id a human considers correct in that context. ~15 words. expected_sense is a reference; the judge scores whether the model's choice fits the SENTENCE (0-5), not just exact-id match.",
+  "items": [
+    {"term": "gas",      "sentence": "We must reduce carbon gas emissions.",        "expected_sense": "gas.n.02", "note": "physics/state-of-matter sense, not gasoline"},
+    {"term": "bank",     "sentence": "He sat on the river bank watching the water.", "expected_sense": "bank.n.01", "note": "sloping land beside water, not finance"},
+    {"term": "bank",     "sentence": "She deposited her salary at the bank.",        "expected_sense": "bank.n.02", "note": "financial institution"},
+    {"term": "spring",   "sentence": "Flowers bloom in the spring.",                 "expected_sense": "spring.n.01", "note": "the season"},
+    {"term": "spring",   "sentence": "The mattress spring broke last night.",        "expected_sense": "spring.n.02", "note": "coiled metal device"},
+    {"term": "light",    "sentence": "Please turn on the light.",                    "expected_sense": "light.n.01", "note": "electromagnetic radiation / lamp"},
+    {"term": "light",    "sentence": "This bag is very light to carry.",             "expected_sense": "light.a.01", "note": "low weight (adjective)"},
+    {"term": "run",      "sentence": "I run five kilometres every morning.",         "expected_sense": "run.v.01", "note": "move fast on foot"},
+    {"term": "run",      "sentence": "She runs a small bakery downtown.",            "expected_sense": "run.v.03", "note": "operate/manage a business"},
+    {"term": "fair",     "sentence": "The referee made a fair decision.",            "expected_sense": "fair.a.01", "note": "just / unbiased"},
+    {"term": "novel",    "sentence": "I read a fascinating novel last week.",        "expected_sense": "novel.n.01", "note": "a long fictional narrative"},
+    {"term": "novel",    "sentence": "They proposed a novel approach to the problem.","expected_sense": "novel.a.01", "note": "new / original (adjective)"},
+    {"term": "current",  "sentence": "The river current is very strong here.",       "expected_sense": "current.n.01", "note": "flow of water"},
+    {"term": "address",  "sentence": "He gave a moving address to the graduates.",   "expected_sense": "address.n.02", "note": "a formal speech"},
+    {"term": "patient",  "sentence": "The doctor examined the patient carefully.",   "expected_sense": "patient.n.01", "note": "a person under medical care"}
+  ]
+}

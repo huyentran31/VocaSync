@@ -1,0 +1,55 @@
+# Execution policy — YAML for nested config (Day 5: YAML 51.9% > JSON 43.1% for >3 levels).
+# Read by the agent harness; tune here without touching code.
+
+agent:
+  max_tool_calls_per_turn: 16       # S18 F2: raised 8->16 so a multi-phrase explain has room
+                                     # for batched recall + wordnet + the explain chain (was
+                                     # bailing at the cap). Documentary — code uses loop.MAX_TOOL_CALLS.
+  on_ambiguous: ask                  # never guess
+  recall_before_fetch: true          # always check memory first
+
+enrich:
+  batch: true                        # one AI call for all terms (cost)
+  low_confidence_threshold: 0.7      # below -> force HITL review
+  ai_fields_need_review: [collocations, mnemonic, pattern, sense_id]
+
+wordnet:
+  deterministic_fields: [synonyms, antonyms, is_a, hyponym, category]
+
+ffmpeg:
+  clip: short                        # sentence ±1 line
+  media: [audio, screenshot]         # video optional (Vision)
+  reencode_if_accuracy_needed: true  # do not blindly -c copy
+  seek: ss_before_i                  # fast seek
+
+hitl:
+  gate_before: [commit_to_graph, commit_to_deck]
+  source_of_truth: pending_drafts.json + in-app data_editor
+
+errors:
+  clip_error: { action: mark_fail_and_continue }
+  system_error: { action: halt_and_report }
+
+model_routing:                       # Day 5 hybrid inference
+  cheap_tasks: [ocr, format, simple_extract]    # -> small/fast model (e.g. Flash)
+  hard_tasks: [sense_disambiguation, explain]   # -> strong model
+
+# Policy Server (Day 5 zero-trust): structural gating that intercepts EVERY tool call
+# at runtime (policy.py, wired into registry.call_tool) — before a tool touches disk/net.
+# Deterministic, fast, binary. Default role = full toolset so nothing breaks; switch the
+# agent to a least-privilege role (e.g. a no-key public demo runs read-only) via CAPSTONE_ROLE.
+policy:
+  enabled: true
+  default_role: agent                # registry.call_tool runs as this unless CAPSTONE_ROLE overrides
+  default_env: demo                  # unless CAPSTONE_ENV overrides
+  environments:
+    demo:
+      blocked_tools: []              # nothing blocked in the demo environment
+  roles:
+    agent:                           # the full in-app agent
+      allowed_tools: ['*']
+    viewer:                          # read-only (e.g. public/no-key demo): deterministic lookups only
+      allowed_tools: [recall, wordnet_lookup, conceptnet_lookup, explain, build_render_graph]
+  # Write-scope tools that MUST pass HITL review before anything persists to the graph/deck.
+  # (Structural note for reviewers; the hard gate is the Commit-Approved step in the app.)
+  hitl_write_tools: [enrich, make_anki, stage_for_review]

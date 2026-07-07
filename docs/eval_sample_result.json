@@ -1,0 +1,146 @@
+{
+  "summary": {
+    "mode": "ai",
+    "n": 15,
+    "exact_match_accuracy": 0.467,
+    "mean_judge_score_0_5": 4.0,
+    "judge_pass_rate_ge3": 0.8
+  },
+  "rows": [
+    {
+      "term": "gas",
+      "sentence": "We must reduce carbon gas emissions.",
+      "expected": "gas.n.02",
+      "chosen": "gas.n.02",
+      "exact": true,
+      "score": 5,
+      "reason": "The chosen sense accurately describes the state of matter of carbon emissions."
+    },
+    {
+      "term": "bank",
+      "sentence": "He sat on the river bank watching the water.",
+      "expected": "bank.n.01",
+      "chosen": "bank.n.01",
+      "exact": true,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the context of land beside a river."
+    },
+    {
+      "term": "bank",
+      "sentence": "She deposited her salary at the bank.",
+      "expected": "bank.n.02",
+      "chosen": "depository_financial_institution.n.01",
+      "exact": false,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the context of depositing a salary into a financial institution."
+    },
+    {
+      "term": "spring",
+      "sentence": "Flowers bloom in the spring.",
+      "expected": "spring.n.01",
+      "chosen": "spring.n.01",
+      "exact": true,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the context of seasonal bloom."
+    },
+    {
+      "term": "spring",
+      "sentence": "The mattress spring broke last night.",
+      "expected": "spring.n.02",
+      "chosen": "spring.n.02",
+      "exact": true,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the definition of a mattress spring."
+    },
+    {
+      "term": "light",
+      "sentence": "Please turn on the light.",
+      "expected": "light.n.01",
+      "chosen": "light.n.02",
+      "exact": false,
+      "score": 5,
+      "reason": "The chosen sense 'any device serving as a source of illumination' perfectly matches the pragmatic meaning of 'light' in the command 'turn on the light', whereas"
+    },
+    {
+      "term": "light",
+      "sentence": "This bag is very light to carry.",
+      "expected": "light.a.01",
+      "chosen": "light.n.01",
+      "exact": false,
+      "score": 0,
+      "reason": "The chosen sense is a noun referring to illumination, while the word in the sentence is an adjective describing low weight."
+    },
+    {
+      "term": "run",
+      "sentence": "I run five kilometres every morning.",
+      "expected": "run.v.01",
+      "chosen": "run.n.07",
+      "exact": false,
+      "score": 0,
+      "reason": "The sentence uses 'run' as a verb, but the chosen sense is a noun."
+    },
+    {
+      "term": "run",
+      "sentence": "She runs a small bakery downtown.",
+      "expected": "run.v.03",
+      "chosen": "run.n.01",
+      "exact": false,
+      "score": 0,
+      "reason": "The chosen sense refers to a baseball statistic, whereas the sentence uses 'run' as a verb meaning to manage or operate a business."
+    },
+    {
+      "term": "fair",
+      "sentence": "The referee made a fair decision.",
+      "expected": "fair.a.01",
+      "chosen": "fair.a.01",
+      "exact": true,
+      "score": 5,
+      "reason": "The definition perfectly captures the meaning of fair in the context of a referee's decision."
+    },
+    {
+      "term": "novel",
+      "sentence": "I read a fascinating novel last week.",
+      "expected": "novel.n.01",
+      "chosen": "novel.n.01",
+      "exact": true,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the context of a book read."
+    },
+    {
+      "term": "novel",
+      "sentence": "They proposed a novel approach to the problem.",
+      "expected": "novel.a.01",
+      "chosen": "fresh.s.03",
+      "exact": false,
+      "score": 5,
+      "reason": "The sense 'original and of a kind not seen before' is an exact synonym for 'novel' in the context of proposing a new approach."
+    },
+    {
+      "term": "current",
+      "sentence": "The river current is very strong here.",
+      "expected": "current.n.01",
+      "chosen": "current.n.02",
+      "exact": false,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the context of a river's water flow, whereas the reference sense incorrectly refers to electrical current."
+    },
+    {
+      "term": "address",
+      "sentence": "He gave a moving address to the graduates.",
+      "expected": "address.n.02",
+      "chosen": "address.n.03",
+      "exact": false,
+      "score": 5,
+      "reason": "The chosen sense 'formal spoken communication' is the correct definition for 'address' in this context, whereas the reference sense is incorrect."
+    },
+    {
+      "term": "patient",
+      "sentence": "The doctor examined the patient carefully.",
+      "expected": "patient.n.01",
+      "chosen": "patient.n.01",
+      "exact": true,
+      "score": 5,
+      "reason": "The chosen sense perfectly matches the context of a doctor examining an individual."
+    }
+  ]
+}

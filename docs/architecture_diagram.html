@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- VocaSync architecture diagram — INTERNAL asset. Open in a browser, F11, screenshot
+     (Win+Shift+S) -> save as docs/architecture.png for README + Kaggle Media Gallery.
+     Every box below reflects VERIFIED code facts (10 tools, MAX_TOOL_CALLS=10, 2 skills,
+     grounding gate, HITL commit, 4 outputs). Do not add features that don't exist. -->
+<head>
+<meta charset="utf-8">
+<title>VocaSync — Architecture</title>
+<style>
+  :root{
+    --bg:#0d1220; --panel:#151c30; --line:#2a3554; --txt:#e8ecf6; --dim:#93a0c0;
+    --gold:#f5c542; --blue:#5b8def; --green:#4fc38a; --red:#e0607e; --purple:#9b7ded;
+  }
+  *{box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif;}
+  body{background:var(--bg); color:var(--txt); margin:0; padding:28px 40px; min-width:1280px;}
+  h1{font-size:26px; margin:0 0 2px;}
+  h1 .brand{color:var(--gold);}
+  .sub{color:var(--dim); font-size:14px; margin-bottom:22px;}
+  .row{display:flex; gap:18px; align-items:stretch; margin-bottom:14px;}
+  .col{display:flex; flex-direction:column; gap:14px;}
+  .box{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+  .box h3{margin:0 0 6px; font-size:15px;}
+  .box p{margin:0; font-size:12.5px; color:var(--dim); line-height:1.45;}
+  .tag{display:inline-block; font-size:10.5px; padding:2px 8px; border-radius:20px;
+       margin:2px 3px 0 0; border:1px solid var(--line); color:var(--txt);}
+  .accent-gold{border-top:3px solid var(--gold);}
+  .accent-blue{border-top:3px solid var(--blue);}
+  .accent-green{border-top:3px solid var(--green);}
+  .accent-red{border-top:3px solid var(--red);}
+  .accent-purple{border-top:3px solid var(--purple);}
+  .arrow{display:flex; align-items:center; justify-content:center; color:var(--dim);
+         font-size:22px; padding:0 2px;}
+  .flex1{flex:1;}
+  .flow-note{font-size:11px; color:var(--gold); text-align:center; margin-top:2px;}
+  .tools{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:8px;}
+  .tool{background:#0f1526; border:1px solid var(--line); border-radius:8px;
+        font-size:11px; padding:5px 7px; text-align:center; color:var(--txt);}
+  .outputs{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px;}
+  .out{background:#0f1526; border:1px solid var(--line); border-radius:8px;
+       font-size:11.5px; padding:8px; text-align:center;}
+  .out b{color:var(--gold); display:block; font-size:12px;}
+  .footer{color:var(--dim); font-size:12px; margin-top:16px; text-align:center;}
+  .footer b{color:var(--gold);}
+  .gate{background:linear-gradient(90deg,#2a1f33,#1d2438); border:1px solid var(--purple);}
+</style>
+</head>
+<body>
+
+<h1><span class="brand">VocaSync</span> — Agent Architecture (Model + Harness)</h1>
+<div class="sub">Learn vocabulary from the films you watch · movie subtitles → personal knowledge graph → Anki, Obsidian, highlighted subtitles</div>
+
+<div class="row">
+  <!-- User / UI -->
+  <div class="box accent-gold" style="width:220px;">
+    <h3>👤 Learner · Streamlit UI</h3>
+    <p>Attach a subtitle/video, then:</p>
+    <span class="tag">💬 Ask Agent</span><span class="tag">⛏ Mine</span>
+    <span class="tag">📖 Explain</span><span class="tag">🌱 Expand</span>
+    <p style="margin-top:8px;">Ask = agent picks its route.<br>Mine/Explain/Expand = fixed pipelines.</p>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Agent core -->
+  <div class="box accent-blue flex1">
+    <h3>🤖 Agent Loop <span style="color:var(--dim); font-weight:normal;">(agent/loop.py)</span></h3>
+    <p><b style="color:var(--txt)">Model:</b> Gemini 3.1 Flash-Lite · <b style="color:var(--txt)">bounded ≤ 10 tool calls/turn</b> ·
+       decides one JSON step at a time</p>
+    <p style="margin-top:6px;"><b style="color:var(--txt)">Harness:</b>
+      <span class="tag">AGENTS.md contract</span>
+      <span class="tag">2 Agent Skills (SKILL.md)</span>
+      <span class="tag">execution policy</span>
+      <span class="tag">tool trajectory shown in UI</span></p>
+    <div class="tools">
+      <div class="tool">ingest_transcript</div><div class="tool">extract_vocab</div>
+      <div class="tool">wordnet_lookup</div><div class="tool">conceptnet_lookup</div>
+      <div class="tool">recall</div><div class="tool">enrich</div>
+      <div class="tool">explain</div><div class="tool">stage_for_review</div>
+      <div class="tool">make_anki</div><div class="tool">build_render_graph</div>
+    </div>
+    <div class="flow-note">10 tools in one registry — also exposed over MCP (mcp_server.py, stdio)</div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Grounding gate -->
+  <div class="box gate" style="width:250px;">
+    <h3>🛡 Grounding Gate <span style="color:var(--dim); font-weight:normal;">(Python, 0 AI)</span></h3>
+    <p>“The AI proposes, the transcript decides.”</p>
+    <p style="margin-top:6px;">• every quoted line must exist verbatim in the transcript<br>
+       • fabricated quotes replaced with the real cue<br>
+       • timestamps come from subtitle cues, never from the model<br>
+       • ungrounded rows flagged ⚠ for review</p>
+  </div>
+</div>
+
+<div class="row">
+  <div style="width:220px;" class="col">
+    <div class="box accent-green flex1">
+      <h3>📚 Local Knowledge</h3>
+      <p>WordNet — offline senses &amp; relations (primary source). ConceptNet — optional online lookup.
+         Otherwise data stays local; the LLM API is the only other network call.</p>
+    </div>
+  </div>
+
+  <div class="arrow">↳</div>
+
+  <!-- HITL -->
+  <div class="box accent-red flex1">
+    <h3>✅ Human-in-the-Loop Review</h3>
+    <p>The learner <b style="color:var(--txt)">aligns with the AI</b>: review every row, edit any field if needed, and approve.
+       Editable table — ⚠ ai-flag (why a row needs eyes) · 🤖 ai-fields (what the AI wrote) · sense browser ·
+       ungrounded rows carry the nearest real transcript line.
+       <b style="color:var(--txt)">Nothing enters the graph until you commit.</b></p>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Outputs -->
+  <div class="box accent-gold flex1">
+    <h3>📦 Commit → 4 Artifacts + Graph</h3>
+    <div class="outputs">
+      <div class="out"><b>Anki .apkg</b>4 card types, audio + screenshot cut by ffmpeg at the cue</div>
+      <div class="out"><b>Obsidian vault</b>one .md per node, wiki-linked</div>
+      <div class="out"><b>infolog.txt</b>word → film @ timestamp → sentence</div>
+      <div class="out"><b>.ass subtitles</b>re-watch with learned words highlighted</div>
+    </div>
+    <p style="margin-top:8px;">🕸 <b style="color:var(--txt)">Personal knowledge graph</b> grows across films —
+       cross-film links by synonym / is-a / hyponym / part-of (e.g. "go on" in one film linked to "continue" learned in another).</p>
+  </div>
+</div>
+
+<div class="footer">
+  Kaggle × Google — Vibecoding Agents Capstone · track <b>Agents for Good (Education)</b> ·
+  concepts: <b>MCP Server</b> · <b>Agent Skills</b> · <b>Security &amp; Evals</b> · <b>Deployability (setup.bat)</b>
+</div>
+
+</body>
+</html>

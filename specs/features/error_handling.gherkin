@@ -1,0 +1,18 @@
+# Spec-Driven / BDD — Day 5. Two-tier error model (also AGENTS.md §4).
+Feature: Distinguish clip-error (continue) vs system-error (halt)
+
+  Scenario: clip-error -> mark fail, continue
+    Given one item has a missing word / bad timestamp / ffmpeg fails on that clip
+    When the pipeline processes it
+    Then set status='fail' + system_note, log it
+    And CONTINUE with the next item (the run never crashes)
+
+  Scenario: system-error -> halt and report
+    Given a system-level fault (missing API key / corrupt personal_graph.json / ffmpeg|Whisper not installed)
+    When the pipeline hits it
+    Then HALT immediately and report the cause clearly
+    And do NOT silently swallow it
+
+  Scenario: invalid AI output -> retry, not crash
+    Given enrich/extract returns data that fails schema.py validation
+    Then retry the call; if still invalid, mark the item fail and continue

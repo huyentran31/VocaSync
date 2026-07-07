@@ -1,0 +1,22 @@
+# Spec-Driven / BDD — Day 5 (course_md/Day_5_v3.md). State > Action > Outcome.
+Feature: Cut short vocab clips (audio + screenshot) for Anki cards
+  Background:
+    Given a source video/audio and a unit with a sentence + timestamps
+    And ffmpeg is installed
+
+  Scenario: Extract a short clip for one sentence
+    Given the sentence spans [120.5, 125.3] in "movie.mp4"
+    When make_anki cuts the clip
+    Then an audio file "anki_<id>.mp3" and an image "anki_<id>.jpg" (mid-frame) are created
+    And filenames are ASCII-only (no Vietnamese diacritics/spaces)
+    And the clip is short (the sentence ±1 line), not the long teaching clip
+
+  Scenario: Timestamp out of bounds -> clip-error, continue
+    Given the sentence end exceeds the media duration
+    When make_anki cuts the clip
+    Then this card is set status='fail' with a system_note
+    And the run CONTINUES with the next card (never crashes)
+
+  Scenario: Frame-accurate when needed
+    Given accuracy matters for a short clip
+    Then re-encode is allowed (do NOT blindly -c copy; -ss before -i for fast seek)

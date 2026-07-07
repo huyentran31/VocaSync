@@ -1,0 +1,33 @@
+# Pinned to the versions verified working in this environment (Python 3.14, Day-4
+# anti-slopsquatting: pin deps + pip-audit). Exact == pins below are installed &
+# tested (6 offline tests + part_of + real-API run all pass).
+
+# Core
+pydantic==2.13.4
+
+# NLP / graph (deterministic-first)
+nltk==3.9.4            # WordNet — after install: python -m nltk.downloader wordnet omw-1.4
+networkx==3.6.1
+pyvis==0.3.2
+
+# Anki
+genanki==0.13.1
+
+# Data / HITL
+openpyxl==3.1.5
+pandas==3.0.3
+numpy==2.4.4           # used by evals/mine_corrections.py (pure-numpy TF-IDF + KMeans)
+
+# App + utils
+streamlit==1.58.0
+requests==2.34.2       # the Gemini call goes through plain requests (no SDK needed)
+PyYAML==6.0.3          # read specs/config/execution_policy.yaml (Policy Server, Day 5)
+pip-audit==2.10.1      # Day 4 — anti-slopsquatting dependency scan
+
+# --- Optional (NOT pinned: not installed in the verified env; pin after you install
+#     so you don't pin an install-breaking version). Enable the features you need: ---
+# spacy            # lemmatization/POS (optional) — python -m spacy download en_core_web_sm
+# openai-whisper   # media ingest (Path B): transcribe audio/video; needs ffmpeg on PATH
+# markitdown[pdf]  # Vision: PDF/image input adapters
+# anthropic        # alternative agent LLM provider (this build uses Gemini via requests)
+# google-genai     # alternative Gemini SDK (not required; requests is used instead)

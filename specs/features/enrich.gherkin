@@ -1,0 +1,21 @@
+# Spec-Driven / BDD — Day 5. Deterministic-first + AI flagged (Day 4 anti-hallucination).
+Feature: Enrich a vocab term (pick sense + fill uncertain fields)
+  Background:
+    Given a term, the sentence it appeared in, and all WordNet senses (from wordnet_lookup)
+
+  Scenario: Pick the correct sense from context
+    Given the term "gas" in "reduce carbon gas emissions"
+    When enrich runs (one AI call)
+    Then it selects the gaseous-state sense (NOT flatulence/accelerator)
+    And synonyms/antonyms/category are taken DETERMINISTICALLY from that WordNet sense
+    And source_map marks sense_id='ai', category/edges='wordnet'
+
+  Scenario: Fill uncertain fields, flagged
+    When enrich fills collocations and mnemonic
+    Then those fields are marked source='ai' in source_map (need HITL review)
+    And the agent NEVER invents synonyms/edges (those are WordNet-only)
+
+  Scenario: Word not in WordNet -> AI fallback, flagged
+    Given the term has no WordNet entry
+    Then enrich may provide an AI definition flagged 'ai'
+    And the unit is routed to the in-app review table for human verification
