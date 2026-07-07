@@ -24,10 +24,13 @@ requests==2.34.2       # the Gemini call goes through plain requests (no SDK nee
 PyYAML==6.0.3          # read specs/config/execution_policy.yaml (Policy Server, Day 5)
 pip-audit==2.10.1      # Day 4 — anti-slopsquatting dependency scan
 
+# Media ingest (Path B): transcribe audio/video when no subtitle is provided (needs ffmpeg
+# on PATH). Unpinned on purpose — pin to the version you install to keep torch/whisper aligned.
+openai-whisper
+
 # --- Optional (NOT pinned: not installed in the verified env; pin after you install
 #     so you don't pin an install-breaking version). Enable the features you need: ---
 # spacy            # lemmatization/POS (optional) — python -m spacy download en_core_web_sm
-# openai-whisper   # media ingest (Path B): transcribe audio/video; needs ffmpeg on PATH
 # markitdown[pdf]  # Vision: PDF/image input adapters
 # anthropic        # alternative agent LLM provider (this build uses Gemini via requests)
 # google-genai     # alternative Gemini SDK (not required; requests is used instead)

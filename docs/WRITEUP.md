@@ -52,11 +52,11 @@ HARNESS     AGENTS.md (operating contract) · 2 Agent Skills (SKILL.md) ·
 
 Three design rules carry the whole system:
 
-**Deterministic first.** WordNet (local) is the backbone: senses, synonyms, antonyms, hypernyms all come from it as verifiable edges. The AI's job is narrow — pick which sense fits the sentence, and fill the fields a dictionary cannot (collocations, mnemonics, topic tags). Every AI-authored field is marked `source_map='ai'` and surfaced in review. (A ConceptNet lookup tool exists but is currently disabled — its public API was returning persistent 502s — so word meanings come from local WordNet.)
+**Deterministic first.** WordNet (local) is the backbone: senses, synonyms, antonyms, hypernyms all come from it as verifiable edges. The AI's job is narrow — pick which sense fits the sentence, and fill the fields a dictionary cannot (collocations, mnemonics, topic tags). Every AI-authored field is marked `source_map='ai'` and surfaced in review. (ConceptNet is an *optional* online lookup that supplements WordNet with life-context edges; it is enabled by default and called when WordNet is insufficient. Because its public API was intermittently returning 502s, we ran with the per-term Mine calls turned off — `CONCEPTNET_PER_TERM=0` — so word meanings come from local WordNet; the agent can still call it on demand.)
 
 **One write point.** Nothing reaches the graph except `commit_approved`, which runs only when the human presses Commit. The agent cannot write the graph at all. Final exports (deck, Obsidian vault, infolog, highlighted `.ass` subtitle) are generated *after* commit, from the approved subset only — an unreviewed word cannot leak into any deliverable.
 
-**No-crash, two tiers.** A bad card or a failed clip is a *clip-error*: mark it, log it, continue. A missing API key or a corrupt graph is a *system-error*: halt with a clear message. When ConceptNet's public API started returning persistent 502s mid-project, the pipeline degraded via a config knob (`CONCEPTNET_PER_TERM=0`) instead of crashing — the error model doing exactly what it was designed for.
+**No-crash, two tiers.** A bad card or a failed clip is a *clip-error*: mark it, log it, continue. A missing API key or a corrupt graph is a *system-error*: halt with a clear message. When ConceptNet's public API started returning intermittent 502s mid-project, the pipeline degraded via a config knob (`CONCEPTNET_PER_TERM=0`, which skips the per-term Mine calls) instead of crashing — and a live 502 simply yields no ConceptNet edges rather than an error. The error model doing exactly what it was designed for.
 
 ## 5. How a session actually runs
 

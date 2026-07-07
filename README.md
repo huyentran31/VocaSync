@@ -73,7 +73,7 @@ HARNESS     AGENTS.md (operating contract) · 2 Agent Skills (SKILL.md) ·
 ```
 
 **Three design rules carry the system:**
-- **Deterministic first.** WordNet (local, offline) is the backbone — senses, synonyms, antonyms, hypernyms as verifiable edges; the AI only picks which sense fits and fills fields a dictionary can't. Every AI-authored field is marked `source_map='ai'` and surfaced in review. ConceptNet is an **optional online lookup**, called only when WordNet is insufficient.
+- **Deterministic first.** WordNet (local, offline) is the backbone — senses, synonyms, antonyms, hypernyms as verifiable edges; the AI only picks which sense fits and fills fields a dictionary can't. Every AI-authored field is marked `source_map='ai'` and surfaced in review. ConceptNet is an **optional online lookup**, called only when WordNet is insufficient — and if its public API is unreachable (e.g. a 502) it simply returns no extra edges, **never crashing the app** (word meanings still come from local WordNet).
 - **One write point.** Nothing reaches the graph except `app.commit_approved`, which runs only when the human presses **Commit**. The agent cannot write the graph. Exports are generated *after* commit, from the approved subset only.
 - **Grounded, self-correcting.** `stage_for_review` runs a two-tier gate — the word must appear in its sentence *and* that sentence must occur in the transcript. Fabricated examples are flagged `ungrounded` and the real transcript line is returned so the model corrects itself.
 
