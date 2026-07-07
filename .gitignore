@@ -98,3 +98,7 @@ data/samples/
 *.srt
 *.vtt
 *.ass
+
+# Kaggle writeup — lives on Kaggle, not the repo
+docs/WRITEUP.md
+docs/WRITEUP_kaggle.md

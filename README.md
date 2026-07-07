@@ -125,7 +125,7 @@ capstone_GD4_askfix/
 ├── legacy/                   # reused upstream modules (whisper, ffmpeg, ai_client, xlsx_utils)
 ├── tests/                    # deterministic test files — 15 offline + 1 live-API (conceptnet)
 ├── data/                     # personal_graph.json (memory) · pending_drafts.json (HITL stash) — gitignored (your own data)
-├── docs/                     # design + architecture diagram + writeup/readme/pitch
+├── docs/                     # design docs + architecture diagram
 ├── setup.bat                 # double-click: venv + install + launch (Windows)
 └── .streamlit/config.toml · .env.example · .gitignore · requirements.txt
 ```
