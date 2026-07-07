@@ -32,5 +32,3 @@ openai-whisper
 #     so you don't pin an install-breaking version). Enable the features you need: ---
 # spacy            # lemmatization/POS (optional) — python -m spacy download en_core_web_sm
 # markitdown[pdf]  # Vision: PDF/image input adapters
-# anthropic        # alternative agent LLM provider (this build uses Gemini via requests)
-# google-genai     # alternative Gemini SDK (not required; requests is used instead)
