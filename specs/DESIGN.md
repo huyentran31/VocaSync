@@ -33,7 +33,7 @@ Two surfaces:
 Fallback (if agent loop unstable): replace free chat with a few intent BUTTONS in app.py (LLM still does enrich/explain).
 
 ## Scope
-v1 = video/audio input, English, 2 skills. Vision = PDF/image input, multi-language, i+1, feedback loop, free chatbot (see PLAN.md).
+v1 = video/audio input, English, 2 skills. Vision = PDF/image input, multi-language, i+1, feedback loop, free chatbot.
 
 ## Execution modes for building (Day 5)
 Architect (scaffold, pin versions) → Builder (match style, show diffs) → Forensic (fix via logs/evidence) → Author (keep docs in sync).

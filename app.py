@@ -1,13 +1,13 @@
 """
-app.py — VocaSync Streamlit UI (GĐ4, task 2 + 3).
+app.py — VocaSync Streamlit UI.
 
-A THIN shell over the existing agent/tools (HANDOVER §3.1: Streamlit stays thin).
-It does NOT reimplement any tool — it dispatches through agent.loop (run_agent /
-run_intent) and agent.registry (call_tool), exactly like the MCP server.
+A THIN shell over the existing agent/tools. It does NOT reimplement any tool —
+it dispatches through agent.loop (run_agent / run_intent) and agent.registry
+(call_tool), exactly like the MCP server.
 
-Design contract (docs/UI_DESIGN.md + the 4 review fixes):
+Design contract:
   • App chrome is ENGLISH; the agent conversation can be any language.
-  • Disk-as-truth (HANDOVER §3.2): data/personal_graph.json is the source of truth;
+  • Disk-as-truth: data/personal_graph.json is the source of truth;
     stats are recomputed by load_graph() on every rerun; session_state holds only light
     pointers (run id, graph.html path, a small last-result summary).
   • Free text box  -> run_agent  (the LLM CHOOSES tools)              [fix 3]
